@@ -36,9 +36,53 @@ module.exports = function(app) {
     // for(var i = 0; i < friendData.length; i++){
 
     // }
+    function getSum(total, num){
+      return total + num;
+    }
 
-    console.log(req.body.scores);
-    console.log(friendData);
+    var newScores = [];
+    for(var i = 0; i<req.body.scores.length; i++){
+      var parseNum = parseInt(req.body.scores[i]);
+      newScores.push(parseNum);
+    }
+    var scoreCompare = [];
+
+    var totalDiff = [];
+
+    for (var i=0; i < friendData.length; i++){
+      var friendC = friendData[i].scores;
+      console.log("FriendC before: " + friendC);
+
+      for(var k = 0; k < friendC.length; k++){
+      friendC[k] = parseInt(friendC[k]);
+      }
+      console.log("friendC: " + friendC);
+
+      for (var j = 0; j < newScores.length; j++){
+        scoreCompare[j]= Math.abs(friendC[j]-newScores[j]);
+      }
+      var Diff = scoreCompare.reduce(getSum);
+      totalDiff.push(Diff);
+      console.log(totalDiff);
+
+    }
+
+    function indexOfSmallest(a) {
+      return a.indexOf(Math.min.apply(Math, a));
+    }
+
+    var indexDiff = indexOfSmallest(totalDiff);
+
+    var result = friendData[indexDiff];
+
+
+    //for (var i = 0; i < scoreCompare.length)
+
+    friendData.push(req.body);
+
+    console.log("New scores: " + newScores);
+    console.log("Score difference: " + scoreCompare);
+    res.json(result);
   });
 
   // ---------------------------------------------------------------------------
